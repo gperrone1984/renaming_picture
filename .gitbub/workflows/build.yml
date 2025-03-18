@@ -1,1 +1,32 @@
 
+name: Build EXE
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install pyinstaller
+
+      - name: Build executable
+        run: pyinstaller --onefile renaming.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: executable
+          path: dist/renaming.exe
